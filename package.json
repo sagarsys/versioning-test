@@ -4,6 +4,7 @@
   "description": "Testing automatic versioning",
   "main": "index.js",
   "scripts": {
+    "release": "standard-version",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -15,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/sagarsys/versioning-test/issues"
   },
-  "homepage": "https://github.com/sagarsys/versioning-test#readme"
+  "homepage": "https://github.com/sagarsys/versioning-test#readme",
+  "devDependencies": {
+    "standard-version": "^7.0.0"
+  }
 }
