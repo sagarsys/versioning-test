@@ -58,7 +58,7 @@ const updateFileVersion = (filePath, searchTerm, separator, version, wrap = fals
     }
 };
 
-// get version from package.json and update in sonar
+// get version from package.json and update in sonar & env
 const version = getCurrentVersion();
 updateFileVersion(sonarPropertiesPath, sonarVersion, '=', version);
 updateFileVersion(envPath, envVersion, ': ', version, true);
