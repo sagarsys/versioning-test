@@ -13,7 +13,7 @@ function check_branch() {
 function exit_script() {
   echo "Exiting script"
   exit
-}
+}k
 
 function confirm() {
   # Print confirmation message
@@ -106,7 +106,7 @@ function amend_commits() {
     echo "Merging all commits($merge_base) since branch creation into a single commit"
     git reset --soft "$merge_base" # since we always start a feature from develop branch
     git add .
-    git commit -am "$message" --reset-author
+    git commit --amend -am "$message" --reset-author
     git push --force-with-lease
 }
 
