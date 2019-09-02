@@ -33,8 +33,6 @@ function get_first_branch_commit_id() {
 }
 
 function get_commit_message() {
-  echo "Get msg $#"
-  echo "$@"
   while [[ "$#" -gt 0 ]]
   do
     case $1 in
@@ -53,6 +51,7 @@ function get_commit_message() {
     esac
     shift
   done
+
   if [[ ! $TYPE ]]
   then
     echo "* Enter the development type (feat, fix, chore, refactor, test, docs, build)"
@@ -81,13 +80,13 @@ function get_commit_message() {
   if [[ ($TYPE != "feat" && $TYPE != "fix" && $TYPE != "chore" && $TYPE != "test"
         && $TYPE != "refactor" && $TYPE != "docs" && $TYPE != "build" ) ]]
   then
-    echo "Invalid type, please insert a valid type"
+    echo "Invalid type, please insert a valid type" &&
     get_commit_message -m "$MSG" -s "$SCOPE" -d "$DESC"
   fi
 
   if [[ ! $message ]]
   then
-    echo $SCOPE $DESC
+    echo "Invalid message, please insert a valid message" &&
     get_commit_message -t "$TYPE" -s "$SCOPE" -d "$DESC"
   fi
 
@@ -124,7 +123,7 @@ echo "$merge_base"
 
 # Launch rebase on branch with commit id
 echo "Getting amended commit message"
-message=$(get_commit_message)
+message=get_commit_message
 echo "$message"
 amend_commits "$message"
 
