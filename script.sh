@@ -116,7 +116,7 @@ function amend_commits() {
 current_branch=$(check_branch)
 
 # Confirm that you want to rebase => All uncommitted changes will be lost
-confirm "This will rebase the $current_branch branch? \n Make sure you have committed all your changes, all uncommitted changes will be lost."
+#confirm "This will rebase the $current_branch branch? \n Make sure you have committed all your changes, all uncommitted changes will be lost."
 
 # Get the first commit id of branch
 merge_base=$(get_first_branch_commit_id)
