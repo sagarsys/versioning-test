@@ -106,8 +106,8 @@ function amend_commits() {
     echo "Merging all commits($merge_base) since branch creation into a single commit"
     git reset --soft "$merge_base" # since we always start a feature from develop branch
     git add .
-    git commit --amend -am "$message" --reset-author
-    git push --force-with-lease
+    git commit -am "$message"
+    git push origin "$current_branch" --force-with-lease
 }
 
 echo "Running script.............................."
@@ -123,6 +123,7 @@ merge_base=$(get_first_branch_commit_id)
 echo "$merge_base"
 
 # Launch rebase on branch with commit id
+echo "Getting amended commit message"
 message=$(get_commit_message)
 echo "$message"
 amend_commits "$message"
