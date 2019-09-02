@@ -13,7 +13,7 @@ function check_branch() {
 function exit_script() {
   echo "Exiting script"
   exit
-}k
+}
 
 function confirm() {
   # Print confirmation message
