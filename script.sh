@@ -40,11 +40,11 @@ function get_first_branch_commit_id() {
   echo "$sha"
 }
 
-function rebase_branch() {
-    echo "Initializing interactive rebase..."
-    echo "Pick the first commit & squash the remaining ones"
-#    GIT_SEQUENCE_EDITOR="sed -i '2,$ s/pick/squash/'" git rebase -i "$merge_base" -q
-    GIT_SEQUENCE_EDITOR="sed -i '2,$ s/pick/squash/;/# This is the 2nd commit message:/,$ {d}'" git rebase -i "$merge_base" -q
+function amend_commits() {
+    echo "Merging all commits($merge_base) since branch creation into a single commit"
+    git reset --soft "$(git merge-base --fork-point master)"
+    git commit --verbose --reedit-message=HEAD --reset-author
+    git push --force-with-lease
 }
 
 # Check current branch => Exit if master or develop
@@ -57,7 +57,7 @@ confirm "This will rebase the $current_branch branch? \n Make sure you have comm
 merge_base=$(get_first_branch_commit_id)
 
 # Launch rebase on branch with commit id
-rebase_branch
+amend_commits
 
 # Push rebased history to branch
 # Checkout develop and pull changes
