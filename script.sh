@@ -32,72 +32,44 @@ function get_first_branch_commit_id() {
   echo "$sha"
 }
 
-function get_commit_message() {
-  while [[ "$#" -gt 0 ]]
-  do
-    case $1 in
-      -t|--type)
-        local TYPE="$1"
-        ;;
-      -m|--message)
-        local MSG="$2"
-      ;;
-      -s|--scope)
-        local SCOPE="$3"
-      ;;
-      -d|--desc)
-        local DESC="$4"
-      ;;
-    esac
-    shift
-  done
-
-  if [[ ! $TYPE ]]
-  then
+function get_commit_type() {
     echo "* Enter the development type (feat, fix, chore, refactor, test, docs, build)"
     read type
-  fi
-  if [[ ! $MSG ]]
-  then
-    echo "* Enter a commit message describing the development"
-    read message
-  fi
-
-  if [[ "$#" -eq 0 && ! $SCOPE && ! $DESC ]]
-  then
-    echo "Enter an optional scope for the development [leave blank for no scope]"
-    read scope
-
-    echo "Enter an optional description for the development [leave blank for no description]"
-    read desc
-  fi
-
-  TYPE=${type,,}
-  MSG=${message,,}
-  SCOPE=${scope,,}
-  DESC=${desc,,}
-
-  if [[ ($TYPE != "feat" && $TYPE != "fix" && $TYPE != "chore" && $TYPE != "test"
+    local TYPE=${type,,}
+    if [[ ($TYPE != "feat" && $TYPE != "fix" && $TYPE != "chore" && $TYPE != "test"
         && $TYPE != "refactor" && $TYPE != "docs" && $TYPE != "build" ) ]]
-  then
-    echo "Invalid type, please insert a valid type" &&
-    get_commit_message -m "$MSG" -s "$SCOPE" -d "$DESC"
-  fi
-
-  if [[ ! $message ]]
-  then
-    echo "Invalid message, please insert a valid message" &&
-    get_commit_message -t "$TYPE" -s "$SCOPE" -d "$DESC"
-  fi
-
-  if [[ $scope ]]
-  then
-    echo "$TYPE($SCOPE): $MSG $DESC"
-  else
-    echo "$TYPE: $MSG $DESC"
-  fi
+    then
+      echo "Invalid type, please insert a valid type" &&
+      get_commit_type
+    fi
+    echo $TYPE
 }
 
+function get_commit_msg() {
+    echo "* Enter a commit message describing the development"
+    read message
+    local MSG=${message,,}
+    if [[ ! $MSG ]]
+    then
+      echo "Invalid message, please insert a valid message" &&
+      get_commit_message
+    fi
+    echo $MSG
+}
+
+function get_commit_scope() {
+    echo "Enter an optional scope for the development [leave blank for no scope]"
+    read scope
+    local SCOPE=${scope,,}
+    echo $SCOPE
+}
+
+function get_commit_desc() {
+    echo "Enter an optional description for the development [leave blank for no description]"
+    read desc
+    local DESC=${desc,,}
+    echo $DESC
+}
 
 function amend_commits() {
     echo "Amend $1"
@@ -111,21 +83,21 @@ function amend_commits() {
 
 echo "Running script.............................."
 # Check current branch => Exit if master or develop
-current_branch=$(check_branch)
-echo "$current_branch"
+#current_branch=$(check_branch)
+#echo "$current_branch"
 
 # Confirm that you want to rebase => All uncommitted changes will be lost
 #confirm "This will rebase the $current_branch branch? \n Make sure you have committed all your changes, all uncommitted changes will be lost."
 
 # Get the first commit id of branch
-merge_base=$(get_first_branch_commit_id)
-echo "$merge_base"
+#merge_base=$(get_first_branch_commit_id)
+#echo "$merge_base"
 
 # Launch rebase on branch with commit id
 echo "Getting amended commit message"
-message=get_commit_message
-echo "$message"
-amend_commits "$message"
+msg=$(get_commit_msg)
+echo $msg
+#amend_commits "$message"
 
 # Push rebased history to branch
 # Checkout develop and pull changes
