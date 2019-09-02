@@ -21,9 +21,6 @@ function confirm() {
   echo -n "Proceed? [y/n]: "
   read answer
   if [[ ${answer,,} == 'y' ]]; then
-    echo "Updating from remote branch"
-    git stash
-    git pull origin "$current_branch"
     return 0;
   else
     exit_script
@@ -105,13 +102,13 @@ function get_commit_message() {
 function amend_commits() {
     local message=$1
     echo "Merging all commits($merge_base) since branch creation into a single commit"
-    git reset --soft "$(git merge-base --fork-point develop)" # since we always start a feature from develop branch
+    git reset --soft "$merge_base" # since we always start a feature from develop branch
     git add .
     git commit -am "$message" --reset-author
     git push --force-with-lease
-    git stash pop
 }
 
+echo "Running script.............................."
 # Check current branch => Exit if master or develop
 current_branch=$(check_branch)
 
