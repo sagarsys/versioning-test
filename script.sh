@@ -33,7 +33,8 @@ function get_first_branch_commit_id() {
 }
 
 function get_commit_message() {
-  echo "$#" "$@"
+  echo "Get msg $#"
+  echo "$@"
   while [[ "$#" -gt 0 ]]
   do
     case $1 in
@@ -100,6 +101,7 @@ function get_commit_message() {
 
 
 function amend_commits() {
+    echo "Amend $1"
     local message=$1
     echo "Merging all commits($merge_base) since branch creation into a single commit"
     git reset --soft "$merge_base" # since we always start a feature from develop branch
@@ -111,17 +113,19 @@ function amend_commits() {
 echo "Running script.............................."
 # Check current branch => Exit if master or develop
 current_branch=$(check_branch)
+echo "$current_branch"
 
 # Confirm that you want to rebase => All uncommitted changes will be lost
 #confirm "This will rebase the $current_branch branch? \n Make sure you have committed all your changes, all uncommitted changes will be lost."
 
 # Get the first commit id of branch
 merge_base=$(get_first_branch_commit_id)
+echo "$merge_base"
 
 # Launch rebase on branch with commit id
 message=$(get_commit_message)
+echo "$message"
 amend_commits "$message"
-
 
 # Push rebased history to branch
 # Checkout develop and pull changes
