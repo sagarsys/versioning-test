@@ -22,8 +22,8 @@ function confirm() {
   read answer
   if [[ ${answer,,} == 'y' ]]; then
     echo "Updating from remote branch"
-    changes=$(git pull origin "$current_branch")
-    if [[ $changes == "Already up to date." ]]; then
+    changes=$(git pull origin "$current_branch" -q)
+    if [[ $changes =~ "Already up to date" ]]; then
       # git reset --hard -q
       return 0;
     else
