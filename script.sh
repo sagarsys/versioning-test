@@ -105,7 +105,7 @@ function get_commit_message() {
 function amend_commits() {
     local message=$1
     echo "Merging all commits($merge_base) since branch creation into a single commit"
-    git reset --soft "$(git merge-base --fork-point master)"
+    git reset --soft "$(git merge-base --fork-point develop)" # since we always start a feature from develop branch
     git add .
     git commit -am "$message" --reset-author
     git push --force-with-lease
