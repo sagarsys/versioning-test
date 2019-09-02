@@ -22,14 +22,9 @@ function confirm() {
   read answer
   if [[ ${answer,,} == 'y' ]]; then
     echo "Updating from remote branch"
-    changes=$(git pull origin "$current_branch")
-    if [[ $changes =~ "Already up to date" ]]; then
-      # git reset --hard -q
-      return 0;
-    else
-      echo "$changes"
-      exit_script
-    fi
+    git stash
+    git pull origin "$current_branch"
+    return 0;
   else
     exit_script
   fi
@@ -114,6 +109,7 @@ function amend_commits() {
     git add .
     git commit -am "$message" --reset-author
     git push --force-with-lease
+    git stash pop
 }
 
 # Check current branch => Exit if master or develop
